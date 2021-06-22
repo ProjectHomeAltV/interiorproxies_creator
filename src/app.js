@@ -5,7 +5,7 @@ var fs = require('fs');
 createFile();
 
 function createFile() {  
-    fs.writeFileSync('../output/interiorproxies.meta', `<?xml version="1.0" encoding="UTF-8"?>\n\n<SInteriorOrderData>
+    fs.writeFileSync('../output/interiorsproxies.meta', `<?xml version="1.0" encoding="UTF-8"?>\n\n<SInteriorOrderData>
     <startFrom value="2000" />
     <filePathHash value="0" />
     <proxies>
@@ -16,11 +16,12 @@ function createFile() {
 
 function appendYTD() {
     glob("../input/**/**.ymap", function (er, files) {
+        let ii = 0;
         for (i=0; i < files.length; i++) {
             var name = path.basename(files[i])
             var name2 = name.replace('.ymap', "")
-
-            fs.appendFile('../output/interiorproxies.meta', (i == 0 ? "  ".repeat(2) : "  ".repeat(4)) + '<Item>' + name2 + '</Item>\n', function (err) {
+            if (!name.includes('milo_')) continue;
+            fs.appendFile('../output/interiorsproxies.meta', (ii == 0 ? "  ".repeat(2) : "  ".repeat(4)) + '<Item>' + name2 + '</Item>\n', function (err) {
                 if (err) {
                     console.log('An error occured.');
                 } else {
@@ -30,7 +31,7 @@ function appendYTD() {
 
             if (i == files.length-1) {
                 setTimeout(() => {
-                    fs.appendFile('../output/interiorproxies.meta', "  ".repeat(2) + '</proxies>\n</SInteriorOrderData>', function(err) {
+                    fs.appendFile('../output/interiorsproxies.meta', "  ".repeat(2) + '</proxies>\n</SInteriorOrderData>', function(err) {
                         if (err) {
                             console.log('An error occured.');
                         } else {
@@ -40,10 +41,11 @@ function appendYTD() {
                 }, 1000);
             }
 
+            ii += 1;
             console.log(name2)
         }
 
-        console.log('\nA resource has been created at ../output/interiorproxies.meta')
+        console.log('\nA resource has been created at ../output/interiorsproxies.meta')
 
         setTimeout(() => {
             process.exit();
